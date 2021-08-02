@@ -19,6 +19,13 @@ class WeatherViewController: UIViewController {
     //MARK: - Properties
     private var weatherController = WeatherController()
     
+    private lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.delegate = self
+        return manager
+    }()
+    
+    
     //MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +34,9 @@ class WeatherViewController: UIViewController {
     }
 
     //MARK: - IBAction
-    @IBAction func locationButtonTapped(_ sender: Any) {}
+    @IBAction func locationButtonTapped(_ sender: Any) {
+        self.locationManagerDidChangeAuthorization(self.locationManager)
+    }
     
     @IBAction func addCityButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "showAddCity", sender: nil)
@@ -77,6 +86,23 @@ class WeatherViewController: UIViewController {
             }
         }
     }
+    
+    //MARK: - Alert showPermission
+    private func showPermission() {
+        let alert = UIAlertController(title: "Autorizar uso da localização", message: "Deseja autorizar o uso da localização", preferredStyle: .alert)
+        
+        let confirm = UIAlertAction(title: "Autorizar", style: .default) { action in
+            //abre o settings do dispositivo ao clicar na action
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+            UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
+        
+        alert.addAction(confirm)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 //MARK: - Protocol
@@ -89,3 +115,26 @@ extension WeatherViewController: AddCityViewControllerDelegate {
         })
     }
 }
+
+//MARK: - CLLocationManagerDelegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+            switch manager.authorizationStatus{
+            case .authorizedAlways, .authorizedWhenInUse:
+                locationManager.requestLocation()
+                print(locationManager.location)
+            case .notDetermined:
+                locationManager.requestWhenInUseAuthorization()
+            default:
+                showPermission()
+        }
+    }
+}
+
