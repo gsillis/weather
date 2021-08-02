@@ -119,6 +119,12 @@ extension WeatherViewController: AddCityViewControllerDelegate {
 //MARK: - CLLocationManagerDelegate
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            manager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let long = location.coordinate.longitude
+            print(lat,long)
+        }
     
     }
     
@@ -129,8 +135,8 @@ extension WeatherViewController: CLLocationManagerDelegate {
             switch manager.authorizationStatus{
             case .authorizedAlways, .authorizedWhenInUse:
                 locationManager.requestLocation()
-                print(locationManager.location)
             case .notDetermined:
+                locationManager.requestLocation()
                 locationManager.requestWhenInUseAuthorization()
             default:
                 showPermission()
