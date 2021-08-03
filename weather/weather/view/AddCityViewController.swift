@@ -61,7 +61,7 @@ class AddCityViewController: UIViewController {
     private func handleSearch(city: String) {
         self.loadingActivityIndicator.startAnimating()
         
-        self.weatherController.fetchWeather(city: city) { [weak self] result in
+        self.weatherController.fetchWeatherByCity(city: city) { [weak self] result in
             guard let view = self else { return }
             switch result {
             case.success(let model):

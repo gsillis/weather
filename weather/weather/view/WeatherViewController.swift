@@ -29,8 +29,7 @@ class WeatherViewController: UIViewController {
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showAnimatedSkeleton()
-        self.fetchWeather()
+        self.fetchWeather(by: "São Paulo")
     }
 
     // MARK: - IBAction
@@ -42,17 +41,36 @@ class WeatherViewController: UIViewController {
         performSegue(withIdentifier: "showAddCity", sender: nil)
     }
     
-    // MARK: - fetchWeather
-    private func fetchWeather() {
-        weatherController.fetchWeather(city: "São Paulo") { result in
-            switch result {
-            case.success(let model):
-                self.updateView(with: model)
-            case.failure(let error):
-                print(error)
+    // MARK: - fetchWeather by city
+    private func fetchWeather(by city: String) {
+        self.showAnimatedSkeleton()
+        weatherController.fetchWeatherByCity(city: city) { result in
+            self.handleResult(result)
+        }
+    }
+    
+    // MARK: - fetchWeather by location
+    private func featchWeatherByLocation(location: CLLocation) {
+        self.showAnimatedSkeleton()
+        let lati = location.coordinate.latitude
+        let long = location.coordinate.longitude
+        weatherController.featchWeatherByLocation(lati: lati, long: long) { result in
+            
+            //espera para atualizar a view - assim é possível ver o skeletonview
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.handleResult(result)
             }
         }
-     
+    }
+    
+    // MARK: - handleResult
+    private func handleResult(_ result: Result<WeatherModel, Error>) {
+        switch result {
+        case.success(let model):
+            self.updateView(with: model)
+        case.failure(let error):
+            print(error)
+        }
     }
     
     // MARK: - Skeleton Animation
@@ -122,20 +140,7 @@ extension WeatherViewController: AddCityViewControllerDelegate {
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
-            manager.stopUpdatingLocation()
-            let lati = location.coordinate.latitude
-            let long = location.coordinate.longitude
-            
-            // atualiza a view com base na localização geografica
-            weatherController.fetchWeatherByLatAndLon(lati: lati, long: long) { [weak self] result in
-                guard let view = self else { return }
-                switch result {
-                case.success(let model):
-                    view.updateView(with: model)
-                case.failure(let error):
-                    print("error \(error)")
-                }
-            }
+            self.featchWeatherByLocation(location: location)
         }
     }
     

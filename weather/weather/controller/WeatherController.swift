@@ -34,7 +34,7 @@ struct WeatherController {
         
     }
     
-    func fetchWeather(city: String, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
+    func fetchWeatherByCity(city: String, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
         let query = city.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? city
         let path = "https://api.openweathermap.org/data/2.5/weather?q=%@&appid=%@&units=metric&lang=pt_br"
         let urlString = String(format: path, query, apiKey)
@@ -42,7 +42,7 @@ struct WeatherController {
         
     }
     
-    func fetchWeatherByLatAndLon(lati: Double, long: Double, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
+    func featchWeatherByLocation(lati: Double, long: Double, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
         let path = """
                         https://api.openweathermap.org/data/2.5/weather?&appid=%@&units=metric&lang=pt_br&lat=%f&lon=%f
                         """
@@ -54,18 +54,19 @@ struct WeatherController {
         AF.request(urlString)
             .validate()
             .responseDecodable(of: WeatherData.self, queue: .main, decoder: JSONDecoder()) { response in
-                switch response.result {
-                case .success(let weatherData):
-                    let model = weatherData.model
-                    completion(.success(model))
-                case .failure(let error):
-                    if let failure = getWeatherError(error, response.data) {
-                        completion(.failure(failure))
-                    } else {
-                        completion(.failure(error))
-                    }
+                
+            switch response.result {
+            case .success(let weatherData):
+                let model = weatherData.model
+                completion(.success(model))
+            case .failure(let error):
+                if let failure = getWeatherError(error, response.data) {
+                    completion(.failure(failure))
+                } else {
+                    completion(.failure(error))
                 }
             }
+        }
     }
     
     private func getWeatherError(_ error: AFError,_ data: Data?) -> Error? {
