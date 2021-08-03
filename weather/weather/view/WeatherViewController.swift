@@ -11,12 +11,12 @@ import CoreLocation
 
 class WeatherViewController: UIViewController {
 
-    //MARK: - IBOutlet
+    // MARK: - IBOutlet
     @IBOutlet weak var weatherForecastImage: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     
-    //MARK: - Properties
+    // MARK: - Properties
     private var weatherController = WeatherController()
     
     private lazy var locationManager: CLLocationManager = {
@@ -26,14 +26,14 @@ class WeatherViewController: UIViewController {
     }()
     
     
-    //MARK: - viewDidLoad
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.showAnimatedSkeleton()
         self.fetchWeather()
     }
 
-    //MARK: - IBAction
+    // MARK: - IBAction
     @IBAction func locationButtonTapped(_ sender: Any) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
     }
@@ -42,7 +42,7 @@ class WeatherViewController: UIViewController {
         performSegue(withIdentifier: "showAddCity", sender: nil)
     }
     
-    //MARK: - fetchWeather
+    // MARK: - fetchWeather
     private func fetchWeather() {
         self.weatherController.fetchWeather(city: "curitiba") { [weak self] result in
             guard let view = self else { return }
@@ -55,7 +55,7 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    //MARK: - Skeleton Animation
+    // MARK: - Skeleton Animation
     private func showAnimatedSkeleton() {
         weatherForecastImage.showAnimatedSkeleton()
         temperatureLabel.showAnimatedSkeleton()
@@ -68,9 +68,9 @@ class WeatherViewController: UIViewController {
         conditionLabel.hideSkeleton()
     }
     
-    //MARK: - updateView
+    // MARK: - updateView
     private func updateView(with data: WeatherModel) {
-        //atualiza as labels e imagem da view e pausa a animação
+        // atualiza as labels e imagem da view e pausa a animação
         self.hideAnimation()
         self.temperatureLabel.text = data.temp.toString().appending("°C")
         self.weatherForecastImage.image = UIImage(named: data.conditionImage)
@@ -78,7 +78,7 @@ class WeatherViewController: UIViewController {
         self.navigationItem.title = data.cityName
     }
     
-    //MARK: - perfom segue
+    // MARK: - perfom segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showAddCity" {
             if let destination = segue.destination as? AddCityViewController {
@@ -87,12 +87,14 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    //MARK: - Alert showPermission
+    // MARK: - Alert showPermission
     private func showPermission() {
-        let alert = UIAlertController(title: "Autorizar uso da localização", message: "Deseja autorizar o uso da localização", preferredStyle: .alert)
+        let title: String =  "Autorizar uso da localização"
+        let message: String = "Deseja autorizar o uso da localização"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let confirm = UIAlertAction(title: "Autorizar", style: .default) { action in
-            //abre o settings do dispositivo ao clicar na action
+        let confirm = UIAlertAction(title: "Autorizar", style: .default) { _ in
+            // abre o settings do dispositivo ao clicar na action
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
             UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
         }
@@ -105,10 +107,10 @@ class WeatherViewController: UIViewController {
     }
 }
 
-//MARK: - Protocol
+// MARK: - Protocol
 extension WeatherViewController: AddCityViewControllerDelegate {
     func didUpdateViewFromSearch(model: WeatherModel) {
-        //dismiss no addCityVc e update da weatherVc
+        // dismiss no addCityVc e update da weatherVc
         presentedViewController?.dismiss(animated: true, completion: { [weak self] in
             guard let view = self else { return }
             view.updateView(with: model)
@@ -116,14 +118,14 @@ extension WeatherViewController: AddCityViewControllerDelegate {
     }
 }
 
-//MARK: - CLLocationManagerDelegate
+// MARK: - CLLocationManagerDelegate
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             manager.stopUpdatingLocation()
-            let lat = location.coordinate.latitude
+            let lati = location.coordinate.latitude
             let long = location.coordinate.longitude
-            print(lat,long)
+            print(lati,long)
         }
     
     }
@@ -132,7 +134,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            switch manager.authorizationStatus{
+            switch manager.authorizationStatus {
             case .authorizedAlways, .authorizedWhenInUse:
                 locationManager.requestLocation()
             case .notDetermined:
@@ -143,4 +145,3 @@ extension WeatherViewController: CLLocationManagerDelegate {
         }
     }
 }
-

@@ -8,4 +8,5 @@ target 'weather' do
   # Pods for weather
     pod 'Alamofire', '~> 5.4'
     pod 'SkeletonView'
+    pod 'SwiftLint'
 end

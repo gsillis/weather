@@ -13,18 +13,18 @@ protocol AddCityViewControllerDelegate: AnyObject {
 
 class AddCityViewController: UIViewController {
     
-    //MARK: - IBOutlet
+    // MARK: - IBOutlet
     @IBOutlet weak var cityNameTextField: UITextField!
     @IBOutlet weak var loadingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var searchButton: UIButton!
     
-    //MARK: - Properties
+    // MARK: - Properties
     private var weatherController = WeatherController()
     weak var delegate: AddCityViewControllerDelegate?
     
-    //MARK: - viewDidLoad
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupLayoutView()
@@ -32,13 +32,13 @@ class AddCityViewController: UIViewController {
         self.hiddenStatusLabel()
     }
     
-    //MARK: - viewWillAppear
+    // MARK: - viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.cityNameTextField.becomeFirstResponder()
     }
     
-    //MARK: - searchButtonTapped
+    // MARK: - searchButtonTapped
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         guard let textField = cityNameTextField.text, !textField.isEmpty else {
             self.showSearchError(text: "É necessário inserir uma cidade para realizar a busca")
@@ -46,18 +46,18 @@ class AddCityViewController: UIViewController {
         self.hiddenStatusLabel()
         self.handleSearch(city: textField)
         
-        //dismiss do teclado ao clicar no botão
+        // dismiss do teclado ao clicar no botão
         self.view.endEditing(true)
     }
         
-    //MARK: - Layout View
+    // MARK: - Layout View
     private func setupLayoutView() {
         self.backgroundView.layer.cornerRadius = 10
         self.searchButton.layer.cornerRadius = 10
         view.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
     }
     
-    //MARK: - Fetch Weather
+    // MARK: - Fetch Weather
     private func handleSearch(city: String) {
         self.loadingActivityIndicator.startAnimating()
         
@@ -68,7 +68,7 @@ class AddCityViewController: UIViewController {
                 view.searchSuccess(model: model)
             case.failure(let error):
                 view.loadingActivityIndicator.stopAnimating()
-                //mensagem de erro é definida pelo controller
+                // mensagem de erro é definida pelo controller
                 view.showSearchError(text: error.localizedDescription)
             }
         }
@@ -85,7 +85,7 @@ class AddCityViewController: UIViewController {
         }
     }
     
-    //setup da mensagem de erro
+    // setup da mensagem de erro
     private func showSearchError(text: String) {
         self.statusLabel.isHidden = false
         self.statusLabel.text = text
@@ -96,25 +96,23 @@ class AddCityViewController: UIViewController {
         self.statusLabel.isHidden = true
     }
     
-    //MARK: - UITapGestureRecognizer
+    // MARK: - UITapGestureRecognizer
     private func addTapGesture() {
-        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                        action: #selector(dismissViewController))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissViewController))
         tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
     }
     
     @objc private func dismissViewController() {
-        //dissmiss no vc ao clicar fora do box
+        // dissmiss no vc ao clicar fora do box
         dismiss(animated: true, completion: nil)
     }
 }
 
-//MARK: - extension UIGestureRecognizerDelegate
+// MARK: - extension UIGestureRecognizerDelegate
 extension AddCityViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                                            shouldReceive touch: UITouch) -> Bool {
-        //reconhe a vc ao clicar fora do box
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // reconhe a vc ao clicar fora do box
         return touch.view == self.view
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-//MARK: - WeatherError
+// MARK: - WeatherError
 enum WeatherError: Error, LocalizedError {
     case cityNotFound(_ description: String)
     
@@ -21,10 +21,8 @@ enum WeatherError: Error, LocalizedError {
 }
 
 struct WeatherController {
-    //MARK: - Get API key from .plist file
+    // MARK: - Get API key from .plist file
     private var apiKey: String {
-        get {
-            //
             guard let filePath = Bundle.main.path(forResource: "API_KEY", ofType: "plist") else {
                 fatalError("Couldn't find file 'API_KEY'.")
             }
@@ -33,7 +31,6 @@ struct WeatherController {
                 fatalError("Couldn't find key 'API_KEY' in 'API_KEY.plist'.")
             }
             return value
-        }
     }
     
     func fetchWeather(city: String, completion: @escaping (Result<WeatherModel, Error>) -> Void) {
@@ -49,8 +46,8 @@ struct WeatherController {
                 let model = weatherData.model
                 completion(.success(model))
             case .failure(let error):
-                if let _error = getWeatherError(error, response.data) {
-                    completion(.failure(_error))
+                if let failure = getWeatherError(error, response.data) {
+                    completion(.failure(failure))
                 } else {
                     completion(.failure(error))
                 }
