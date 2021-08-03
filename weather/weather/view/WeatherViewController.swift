@@ -44,15 +44,15 @@ class WeatherViewController: UIViewController {
     
     // MARK: - fetchWeather
     private func fetchWeather() {
-        self.weatherController.fetchWeather(city: "curitiba") { [weak self] result in
-            guard let view = self else { return }
+        weatherController.fetchWeather(city: "São Paulo") { result in
             switch result {
             case.success(let model):
-                view.updateView(with: model)
+                self.updateView(with: model)
             case.failure(let error):
-                print("error \(error)")
+                print(error)
             }
         }
+     
     }
     
     // MARK: - Skeleton Animation
@@ -125,13 +125,21 @@ extension WeatherViewController: CLLocationManagerDelegate {
             manager.stopUpdatingLocation()
             let lati = location.coordinate.latitude
             let long = location.coordinate.longitude
-            print(lati,long)
+            
+            // atualiza a view com base na localização geografica
+            weatherController.fetchWeatherByLatAndLon(lati: lati, long: long) { [weak self] result in
+                guard let view = self else { return }
+                switch result {
+                case.success(let model):
+                    view.updateView(with: model)
+                case.failure(let error):
+                    print("error \(error)")
+                }
+            }
         }
-    
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
             switch manager.authorizationStatus {
