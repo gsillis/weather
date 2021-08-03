@@ -56,7 +56,7 @@ class WeatherViewController: UIViewController {
         let long = location.coordinate.longitude
         weatherController.featchWeatherByLocation(lati: lati, long: long) { result in
             
-            //espera para atualizar a view - assim é possível ver o skeletonview
+            // espera para atualizar a view - assim é possível ver o skeletonview
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.handleResult(result)
             }
