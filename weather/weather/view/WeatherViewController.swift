@@ -8,6 +8,7 @@
 import UIKit
 import SkeletonView
 import CoreLocation
+import Loaf
 
 class WeatherViewController: UIViewController {
 
@@ -69,8 +70,17 @@ class WeatherViewController: UIViewController {
         case.success(let model):
             self.updateView(with: model)
         case.failure(let error):
-            print(error)
+            handleError(error)
         }
+    }
+    // MARK: - handleError
+    private func handleError(_ error: Error) {
+        self.hideAnimation()
+        self.weatherForecastImage.image = UIImage(named: "imSad")
+        self.temperatureLabel.text = "Ooops!"
+        self.conditionLabel.text = "Algo deu errado, tente novamente."
+        navigationItem.title = ""
+        Loaf(error.localizedDescription, state: .error, location: .top, sender: self).show()
     }
     
     // MARK: - Skeleton Animation
@@ -144,7 +154,9 @@ extension WeatherViewController: CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        handleError(error)
+    }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
             switch manager.authorizationStatus {
