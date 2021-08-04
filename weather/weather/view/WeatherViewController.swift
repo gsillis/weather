@@ -73,6 +73,7 @@ class WeatherViewController: UIViewController {
             handleError(error)
         }
     }
+    
     // MARK: - handleError
     private func handleError(_ error: Error) {
         self.hideAnimation()
