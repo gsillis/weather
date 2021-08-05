@@ -21,6 +21,7 @@
 		DE91D67726B4946500B1AAFC /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91D67626B4946500B1AAFC /* Double+Extensions.swift */; };
 		DED0159C26B1F383006C1934 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED0159B26B1F383006C1934 /* WeatherController.swift */; };
 		DED0159E26B1F6D5006C1934 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED0159D26B1F6D5006C1934 /* WeatherData.swift */; };
+		DED3D0B026BC583B0077AE29 /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED3D0AF26BC583B0077AE29 /* LocationController.swift */; };
 		FAC623B3060EDE87B57DE44B /* Pods_weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F4CBE895934CCEA5F16220 /* Pods_weather.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		DE91D67626B4946500B1AAFC /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		DED0159B26B1F383006C1934 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		DED0159D26B1F6D5006C1934 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		DED3D0AF26BC583B0077AE29 /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 		DED0159826B1F31F006C1934 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				DED3D0AF26BC583B0077AE29 /* LocationController.swift */,
 				DED0159B26B1F383006C1934 /* WeatherController.swift */,
 			);
 			path = controller;
@@ -280,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DED3D0B026BC583B0077AE29 /* LocationController.swift in Sources */,
 				DE91D67726B4946500B1AAFC /* Double+Extensions.swift in Sources */,
 				DE2A737226B837DD0068ADDC /* WeatherDataFailure.swift in Sources */,
 				DE28C26F26B346BE002E3CD3 /* Int+Extensions.swift in Sources */,

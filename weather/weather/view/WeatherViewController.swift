@@ -8,7 +8,6 @@
 import UIKit
 import SkeletonView
 import CoreLocation
-import Loaf
 
 class WeatherViewController: UIViewController {
 
@@ -16,26 +15,22 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherForecastImage: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
+    @IBOutlet weak var locationButton: UIBarButtonItem!
     
     // MARK: - Properties
-    private var weatherController = WeatherController()
-    
-    private lazy var locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-        manager.delegate = self
-        return manager
-    }()
-    
+    private let weatherController: WeatherController = WeatherController()
+    private let locationController: LocationController = LocationController()
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.fetchWeather(by: "São Paulo")
+        self.locationController.delegate = self
     }
 
     // MARK: - IBAction
     @IBAction func locationButtonTapped(_ sender: Any) {
-        locationManagerDidChangeAuthorization(self.locationManager)
+            self.locationController.requestLocationUsage()
     }
     
     @IBAction func addCityButtonTapped(_ sender: Any) {
@@ -44,14 +39,14 @@ class WeatherViewController: UIViewController {
     
     // MARK: - fetchWeather by city
     private func fetchWeather(by city: String) {
-        showAnimatedSkeleton()
-        weatherController.fetchWeatherByCity(city: city) { result in
+        self.showAnimatedSkeleton()
+        self.weatherController.fetchWeatherByCity(city: city) { result in
             self.handleResult(result)
         }
     }
     
     // MARK: - fetchWeather by location
-    private func featchWeatherByLocation(location: CLLocation) {
+    private func fetchWeatherByLocation(location: CLLocation) {
         showAnimatedSkeleton()
         let lati = location.coordinate.latitude
         let long = location.coordinate.longitude
@@ -76,24 +71,23 @@ class WeatherViewController: UIViewController {
     
     // MARK: - handleError
     private func handleError(_ error: Error) {
-        hideAnimation()
-        weatherForecastImage.image = UIImage(named: "imSad")
+        self.hideAnimation()
+        self.weatherForecastImage.image = UIImage(named: "imSad")
         self.temperatureLabel.text = "Ooops!"
         self.conditionLabel.text = "Algo deu errado, tente novamente."
         navigationItem.title = ""
-        Loaf(error.localizedDescription, state: .error, location: .top, sender: self).show()
     }
     
     // MARK: - Skeleton Animation
     private func showAnimatedSkeleton() {
-        weatherForecastImage.showAnimatedSkeleton()
-        temperatureLabel.showAnimatedSkeleton()
-        conditionLabel.showAnimatedSkeleton()
+        self.weatherForecastImage.showAnimatedSkeleton()
+        self.temperatureLabel.showAnimatedSkeleton()
+        self.conditionLabel.showAnimatedSkeleton()
     }
     
     private func hideAnimation() {
-        weatherForecastImage.hideSkeleton()
-        temperatureLabel.hideSkeleton()
+        self.weatherForecastImage.hideSkeleton()
+        self.temperatureLabel.hideSkeleton()
         self.conditionLabel.hideSkeleton()
     }
     
@@ -115,18 +109,6 @@ class WeatherViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - Alert showPermission
-    private func showLocationPermission() {
-        let title: String = "Autorizar uso da localização"
-        let message: String = "Deseja autorizar o uso da localização"
-        let actionTitle: String = "Autorizar"
-
-        presentAlertController(alertTitle: title, alertMessage: message, actionTitle: actionTitle) {
-            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
-            UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
-        }
-    }
 }
 
 // MARK: - Protocol
@@ -141,26 +123,13 @@ extension WeatherViewController: AddCityViewControllerDelegate {
 }
 
 // MARK: - CLLocationManagerDelegate
-extension WeatherViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            featchWeatherByLocation(location: location)
-        }
+extension WeatherViewController: LocationControllerDelegate {
+
+    func locationManager(didUpdateLocations locations: CLLocation) {
+        self.fetchWeatherByLocation(location: locations)
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        handleError(error)
-    }
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            switch manager.authorizationStatus {
-            case .authorizedAlways, .authorizedWhenInUse:
-                locationManager.requestLocation()
-            case .notDetermined:
-                locationManager.requestLocation()
-                locationManager.requestWhenInUseAuthorization()
-            default:
-                showLocationPermission()
-        }
+
+    func locationManager(didFailWithError error: Error) {
+        self.handleError(error)
     }
 }

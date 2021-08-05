@@ -75,6 +75,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="conditionLabel" destination="ARZ-MU-ahQ" id="7VD-TR-iWV"/>
+                        <outlet property="locationButton" destination="c94-yK-lHL" id="ylb-Py-0td"/>
                         <outlet property="temperatureLabel" destination="URH-Fe-Zhh" id="aLt-en-wKJ"/>
                         <outlet property="weatherForecastImage" destination="jg1-OD-1Ud" id="7Lv-4N-4sW"/>
                         <segue destination="r0M-uT-lxi" kind="presentation" identifier="showAddCity" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="Zf5-Cw-KLt"/>
