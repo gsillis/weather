@@ -54,4 +54,23 @@ struct WeatherModel {
             return "imClear"
         }
     }
+    
+    var conditionBackground: String {
+        switch conditionId {
+        case 200...232:
+            return "Thunderstorm"
+        case 300...321:
+            return "Drizzle"
+        case 500...531:
+            return "Rain"
+        case  600...622:
+            return "Snow"
+        case  701...781:
+            return "Atmosphere"
+        case  801...804:
+            return "Clouds"
+        default:
+            return "Clear"
+        }
+    }
 }

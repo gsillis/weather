@@ -35,7 +35,7 @@ class WeatherViewController: UIViewController {
 
     // MARK: - IBAction
     @IBAction func locationButtonTapped(_ sender: Any) {
-        self.locationManagerDidChangeAuthorization(self.locationManager)
+        locationManagerDidChangeAuthorization(self.locationManager)
     }
     
     @IBAction func addCityButtonTapped(_ sender: Any) {
@@ -44,7 +44,7 @@ class WeatherViewController: UIViewController {
     
     // MARK: - fetchWeather by city
     private func fetchWeather(by city: String) {
-        self.showAnimatedSkeleton()
+        showAnimatedSkeleton()
         weatherController.fetchWeatherByCity(city: city) { result in
             self.handleResult(result)
         }
@@ -52,7 +52,7 @@ class WeatherViewController: UIViewController {
     
     // MARK: - fetchWeather by location
     private func featchWeatherByLocation(location: CLLocation) {
-        self.showAnimatedSkeleton()
+        showAnimatedSkeleton()
         let lati = location.coordinate.latitude
         let long = location.coordinate.longitude
         weatherController.featchWeatherByLocation(lati: lati, long: long) { result in
@@ -68,7 +68,7 @@ class WeatherViewController: UIViewController {
     private func handleResult(_ result: Result<WeatherModel, Error>) {
         switch result {
         case.success(let model):
-            self.updateView(with: model)
+            updateView(with: model)
         case.failure(let error):
             handleError(error)
         }
@@ -76,8 +76,8 @@ class WeatherViewController: UIViewController {
     
     // MARK: - handleError
     private func handleError(_ error: Error) {
-        self.hideAnimation()
-        self.weatherForecastImage.image = UIImage(named: "imSad")
+        hideAnimation()
+        weatherForecastImage.image = UIImage(named: "imSad")
         self.temperatureLabel.text = "Ooops!"
         self.conditionLabel.text = "Algo deu errado, tente novamente."
         navigationItem.title = ""
@@ -94,7 +94,7 @@ class WeatherViewController: UIViewController {
     private func hideAnimation() {
         weatherForecastImage.hideSkeleton()
         temperatureLabel.hideSkeleton()
-        conditionLabel.hideSkeleton()
+        self.conditionLabel.hideSkeleton()
     }
     
     // MARK: - updateView
@@ -117,22 +117,15 @@ class WeatherViewController: UIViewController {
     }
     
     // MARK: - Alert showPermission
-    private func showPermission() {
-        let title: String =  "Autorizar uso da localização"
+    private func showLocationPermission() {
+        let title: String = "Autorizar uso da localização"
         let message: String = "Deseja autorizar o uso da localização"
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let confirm = UIAlertAction(title: "Autorizar", style: .default) { _ in
-            // abre o settings do dispositivo ao clicar na action
+        let actionTitle: String = "Autorizar"
+
+        presentAlertController(alertTitle: title, alertMessage: message, actionTitle: actionTitle) {
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
             UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
         }
-        
-        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
-        
-        alert.addAction(confirm)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
     }
 }
 
@@ -151,7 +144,7 @@ extension WeatherViewController: AddCityViewControllerDelegate {
 extension WeatherViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
-            self.featchWeatherByLocation(location: location)
+            featchWeatherByLocation(location: location)
         }
     }
     
@@ -167,7 +160,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
                 locationManager.requestLocation()
                 locationManager.requestWhenInUseAuthorization()
             default:
-                showPermission()
+                showLocationPermission()
         }
     }
 }
