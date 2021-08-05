@@ -18,7 +18,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var locationButton: UIBarButtonItem!
     
     // MARK: - Properties
-    private let weatherController: WeatherController = WeatherController()
+    private let weatherNetwork: WeatherNetwork = WeatherNetwork()
     private let locationController: LocationController = LocationController()
     
     // MARK: - viewDidLoad
@@ -30,7 +30,7 @@ class WeatherViewController: UIViewController {
 
     // MARK: - IBAction
     @IBAction func locationButtonTapped(_ sender: Any) {
-            self.locationController.requestLocationUsage()
+        self.locationController.requestLocationUsage()
     }
     
     @IBAction func addCityButtonTapped(_ sender: Any) {
@@ -40,7 +40,7 @@ class WeatherViewController: UIViewController {
     // MARK: - fetchWeather by city
     private func fetchWeather(by city: String) {
         self.showAnimatedSkeleton()
-        self.weatherController.fetchWeatherByCity(city: city) { result in
+        self.weatherNetwork.fetchWeatherByCity(city: city) { result in
             self.handleResult(result)
         }
     }
@@ -50,7 +50,7 @@ class WeatherViewController: UIViewController {
         showAnimatedSkeleton()
         let lati = location.coordinate.latitude
         let long = location.coordinate.longitude
-        weatherController.featchWeatherByLocation(lati: lati, long: long) { result in
+        self.weatherNetwork.featchWeatherByLocation(lati: lati, long: long) { result in
             
             // espera para atualizar a view - assim é possível ver o skeletonview
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -63,9 +63,9 @@ class WeatherViewController: UIViewController {
     private func handleResult(_ result: Result<WeatherModel, Error>) {
         switch result {
         case.success(let model):
-            updateView(with: model)
+                updateView(with: model)
         case.failure(let error):
-            handleError(error)
+                handleError(error)
         }
     }
     

@@ -21,7 +21,7 @@ class AddCityViewController: UIViewController {
     @IBOutlet weak var searchButton: UIButton!
     
     // MARK: - Properties
-    private var weatherController = WeatherController()
+    private var weatherNetwork: WeatherNetwork = WeatherNetwork()
     weak var delegate: AddCityViewControllerDelegate?
     
     // MARK: - viewDidLoad
@@ -61,7 +61,7 @@ class AddCityViewController: UIViewController {
     private func handleSearch(city: String) {
         self.loadingActivityIndicator.startAnimating()
         
-        self.weatherController.fetchWeatherByCity(city: city) { [weak self] result in
+        self.weatherNetwork.fetchWeatherByCity(city: city) { [weak self] result in
             guard let view = self else { return }
             switch result {
             case.success(let model):
