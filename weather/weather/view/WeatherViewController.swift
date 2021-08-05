@@ -15,7 +15,10 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherForecastImage: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
-    @IBOutlet weak var locationButton: UIBarButtonItem!
+    @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var cityNameLabel: UILabel!
+
+    
     
     // MARK: - Properties
     private let weatherNetwork: WeatherNetwork = WeatherNetwork()
@@ -29,11 +32,11 @@ class WeatherViewController: UIViewController {
     }
 
     // MARK: - IBAction
-    @IBAction func locationButtonTapped(_ sender: Any) {
+    @IBAction func locationButtonTapped(_ sender: UIButton) {
         self.locationController.requestLocationUsage()
     }
     
-    @IBAction func addCityButtonTapped(_ sender: Any) {
+    @IBAction func addCityButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showAddCity", sender: nil)
     }
     
@@ -75,7 +78,8 @@ class WeatherViewController: UIViewController {
         self.weatherForecastImage.image = UIImage(named: "imSad")
         self.temperatureLabel.text = "Ooops!"
         self.conditionLabel.text = "Algo deu errado, tente novamente."
-        navigationItem.title = ""
+        self.cityNameLabel.text = ""
+        self.backgroundImage.image = UIImage(named: "Rain")
     }
     
     // MARK: - Skeleton Animation
@@ -83,12 +87,16 @@ class WeatherViewController: UIViewController {
         self.weatherForecastImage.showAnimatedSkeleton()
         self.temperatureLabel.showAnimatedSkeleton()
         self.conditionLabel.showAnimatedSkeleton()
+        self.cityNameLabel.showAnimatedSkeleton()
+        self.backgroundImage.showAnimatedSkeleton()
     }
     
     private func hideAnimation() {
         self.weatherForecastImage.hideSkeleton()
         self.temperatureLabel.hideSkeleton()
         self.conditionLabel.hideSkeleton()
+        self.cityNameLabel.hideSkeleton()
+        self.backgroundImage.hideSkeleton()
     }
     
     // MARK: - updateView
@@ -98,7 +106,8 @@ class WeatherViewController: UIViewController {
         self.temperatureLabel.text = data.temp.toString().appending("°C")
         self.weatherForecastImage.image = UIImage(named: data.conditionImage)
         self.conditionLabel.text = data.conditionDescription
-        self.navigationItem.title = data.cityName
+        self.cityNameLabel.text = data.cityName
+        self.backgroundImage.image = UIImage(named: data.conditionBackground)
     }
     
     // MARK: - perfom segue
