@@ -16,6 +16,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Clear" translatesAutoresizingMaskIntoConstraints="NO" id="XG1-Oa-yzn">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunny" translatesAutoresizingMaskIntoConstraints="NO" id="mVH-yL-6mI">
                                 <rect key="frame" x="87" y="333" width="240" height="240"/>
                                 <constraints>
@@ -28,6 +31,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="mVH-yL-6mI" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="49n-c5-yoo"/>
+                            <constraint firstItem="XG1-Oa-yzn" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Pt7-oM-5RB"/>
+                            <constraint firstItem="XG1-Oa-yzn" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Xnn-D5-886"/>
+                            <constraint firstItem="XG1-Oa-yzn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="adv-t9-9sF"/>
+                            <constraint firstAttribute="bottom" secondItem="XG1-Oa-yzn" secondAttribute="bottom" id="hRM-9D-aeQ"/>
                             <constraint firstItem="mVH-yL-6mI" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="xPI-jc-2gp"/>
                         </constraints>
                     </view>
@@ -38,6 +45,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Clear" width="1656" height="3584"/>
         <image name="sunny" width="512" height="512"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
