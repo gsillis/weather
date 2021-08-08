@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
+extension UIAlertController {
     
     func presentAlertController(alertTitle: String, alertMessage: String, actionTitle: String, confirmAction: @escaping () -> Void) {
         let alert: UIAlertController = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)

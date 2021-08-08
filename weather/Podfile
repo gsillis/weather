@@ -9,4 +9,5 @@ target 'weather' do
     pod 'Alamofire', '~> 5.4'
     pod 'SkeletonView'
     pod 'SwiftLint'
+    pod 'lottie-ios'
 end

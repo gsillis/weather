@@ -1,24 +1,28 @@
 PODS:
   - Alamofire (5.4.3)
+  - lottie-ios (3.2.3)
   - SkeletonView (1.21.2)
   - SwiftLint (0.43.1)
 
 DEPENDENCIES:
   - Alamofire (~> 5.4)
+  - lottie-ios
   - SkeletonView
   - SwiftLint
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - lottie-ios
     - SkeletonView
     - SwiftLint
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   SkeletonView: a085533443fed0198309f1979780afb6e80eaedd
   SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
 
-PODFILE CHECKSUM: 7f82c2145657ba0cd645d179579f8d39cadd4872
+PODFILE CHECKSUM: 933932dbca13c088960ebde7846911d036e3695a
 
 COCOAPODS: 1.10.1

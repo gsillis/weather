@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 protocol AddCityViewControllerDelegate: AnyObject {
     func didUpdateViewFromSearch(model: WeatherModel)
@@ -19,7 +20,8 @@ class AddCityViewController: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var searchButton: UIButton!
-    
+    @IBOutlet weak var weatherStackView: UIStackView!
+
     // MARK: - Properties
     private var weatherNetwork: WeatherNetwork = WeatherNetwork()
     weak var delegate: AddCityViewControllerDelegate?
@@ -30,13 +32,18 @@ class AddCityViewController: UIViewController {
         self.setupLayoutView()
         self.addTapGesture()
         self.hiddenStatusLabel()
+        self.weatherStackView.addStackLottieAnimation("weather-sunny", index: 0)
+        self.cityNameTextField.delegate = self
     }
-    
+
+
     // MARK: - viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.cityNameTextField.becomeFirstResponder()
     }
+
+
     
     // MARK: - searchButtonTapped
     @IBAction func searchButtonTapped(_ sender: UIButton) {
@@ -49,12 +56,14 @@ class AddCityViewController: UIViewController {
         // dismiss do teclado ao clicar no botão
         self.view.endEditing(true)
     }
+
         
     // MARK: - Layout View
     private func setupLayoutView() {
         self.backgroundView.layer.cornerRadius = 10
         self.searchButton.layer.cornerRadius = 10
         view.backgroundColor = UIColor(white: 0.3, alpha: 0.4)
+        self.cityNameTextField.layer.cornerRadius = 10
     }
     
     // MARK: - Fetch Weather
@@ -89,12 +98,13 @@ class AddCityViewController: UIViewController {
     private func showSearchError(text: String) {
         self.statusLabel.isHidden = false
         self.statusLabel.text = text
-        self.statusLabel.textColor = UIColor.red
     }
     
     private func hiddenStatusLabel() {
         self.statusLabel.isHidden = true
     }
+
+
     
     // MARK: - UITapGestureRecognizer
     private func addTapGesture() {
@@ -114,5 +124,14 @@ extension AddCityViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         // reconhe a vc ao clicar fora do box
         return touch.view == self.view
+    }
+}
+
+// MARK: - extension UITextFieldDelegate
+extension AddCityViewController: UITextFieldDelegate {
+    // dismiss no keyboard ao clicar em return
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }

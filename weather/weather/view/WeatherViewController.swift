@@ -49,6 +49,8 @@ class WeatherViewController: UIViewController {
     }
     
     // MARK: - fetchWeather by location
+
+    // Passar para o controller
     private func fetchWeatherByLocation(location: CLLocation) {
         showAnimatedSkeleton()
         let lati = location.coordinate.latitude
@@ -109,6 +111,8 @@ class WeatherViewController: UIViewController {
         self.cityNameLabel.text = data.cityName
         self.backgroundImage.image = UIImage(named: data.conditionBackground)
     }
+
+    
     
     // MARK: - perfom segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
